@@ -23,10 +23,28 @@ public class Carro : MonoBehaviour
     private Vector2 speed;
     private Vector2 relativeForce;
 
+    private List<GameObject> marcas = new List<GameObject>();
+    [SerializeField] private Transform rd, re;
+
+    void AddMarcas()
+    {
+        GameObject marcaRD = GameObject.Instantiate(Resources.Load("Marcas")) as GameObject;
+        GameObject marcaRE = GameObject.Instantiate(Resources.Load("Marcas")) as GameObject;
+
+        marcaRD.transform.position = rd.position;
+        marcaRD.transform.rotation = rd.rotation;
+
+        marcaRE.transform.position = re.position;
+        marcaRE.transform.rotation = re.rotation;
+
+        marcas.Add(marcaRD);
+        marcas.Add(marcaRE);
+    }
+
     // Update is called once per frame
     private void FixedUpdate()
     {
-        if (Mathf.Abs(transform.position.x) > 10.8f) Debug.Log("Saiu da tela");
+        //if (Mathf.Abs(transform.position.x) > 10.8f) Debug.Log("Saiu da tela");
 
         if (fuel > 0)
         {
@@ -35,7 +53,7 @@ public class Carro : MonoBehaviour
             speed = transform.up * acceleration;
             rb.AddForce(speed);
 
-            Debug.Log("velocity " + rb.velocity);
+            //Debug.Log("velocity " + rb.velocity);
 
             aux = Vector2.Dot(rb.velocity, rb.GetRelativeVector(Vector2.up));
 
@@ -58,6 +76,14 @@ public class Carro : MonoBehaviour
             }
 
             currentSpeed = rb.velocity.magnitude;
+
+
+            //Debug.Log(rb.velocity.magnitude);   
+
+            if(rb.velocity.magnitude <= 4.9f)
+            {
+                AddMarcas();
+            }
 
             //fuel -= Time.deltaTime;
             if (fuel < 0)
